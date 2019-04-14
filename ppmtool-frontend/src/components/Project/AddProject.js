@@ -54,24 +54,27 @@ class AddProject extends Component {
               <hr />
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
-                  <input type="text" className="form-control form-control-lg " placeholder="Project Name" name="projectName"
+                  <input type="text" className={"form-control form-control-lg " + (errors.projectName?"is-invalid":"")} placeholder="Project Name" name="projectName"
                     value={this.state.projectName}
                     onChange={this.onChange} />
+                    {errors.projectName && (<div className="invalid-feedback">{errors.projectName}</div>)}
                 </div>
-                <p>{errors.projectName}</p>
+               
                 <div className="form-group">
-                  <input type="text" className="form-control form-control-lg" placeholder="Unique Project ID"
+                  <input type="text" className={"form-control form-control-lg " + (errors.projectIdentifier?"is-invalid":"")} placeholder="Unique Project ID"
                     name="projectIdentifier" value={this.state.projectIdentifier}
                     onChange={this.onChange} />
+                    {errors.projectIdentifier && (<div className="invalid-feedback">{errors.projectIdentifier}</div>)}
                 </div>
-                <p>{errors.projectIdentifier}</p>
+                
                 <div className="form-group">
-                  <textarea className="form-control form-control-lg" placeholder="Project Description"
+                  <textarea className={"form-control form-control-lg " + (errors.description?"is-invalid":"")} placeholder="Project Description"
                     name="description"
                     value={this.state.description}
                     onChange={this.onChange}></textarea>
+                    {errors.description && (<div className="invalid-feedback">{errors.description}</div>)}
                 </div>
-                <p>{errors.description}</p>
+               
                 <h6>Start Date</h6>
                 <div className="form-group">
                   <input type="date" className="form-control form-control-lg" name="start_date"
