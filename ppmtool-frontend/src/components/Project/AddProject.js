@@ -75,6 +75,7 @@ class AddProject extends Component {
                     {errors.description && (<div className="invalid-feedback">{errors.description}</div>)}
                 </div>
                
+
                 <h6>Start Date</h6>
                 <div className="form-group">
                   <input type="date" className="form-control form-control-lg" name="start_date"
