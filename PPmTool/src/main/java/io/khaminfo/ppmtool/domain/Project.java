@@ -27,9 +27,12 @@ public class Project {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date end_date;
     @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(updatable = false)
     private Date created_At;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
+    @OneToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL,mappedBy = "project")
+    private BackLog backlog;
 
     public Project() {
     }
@@ -55,7 +58,7 @@ public class Project {
     }
 
     public void setProjectIdentifier(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+        this.projectIdentifier = projectIdentifier.toUpperCase();
     }
 
     public String getDescription() {
@@ -98,7 +101,15 @@ public class Project {
         this.updated_At = updated_At;
     }
 
-    @PrePersist
+    public BackLog getBacklog() {
+		return backlog;
+	}
+
+	public void setBacklog(BackLog backlog) {
+		this.backlog = backlog;
+	}
+
+	@PrePersist
     protected void onCreate(){
         this.created_At = new Date();
     }
