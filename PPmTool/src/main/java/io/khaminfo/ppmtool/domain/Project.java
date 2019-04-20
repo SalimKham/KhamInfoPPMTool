@@ -2,6 +2,7 @@ package io.khaminfo.ppmtool.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -31,8 +32,10 @@ public class Project {
     private Date created_At;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
-    @OneToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL,mappedBy = "project")
-    private BackLog backlog;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    @JsonIgnore
+    private Backlog backlog;
 
     public Project() {
     }
@@ -58,7 +61,7 @@ public class Project {
     }
 
     public void setProjectIdentifier(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier.toUpperCase();
+        this.projectIdentifier = projectIdentifier;
     }
 
     public String getDescription() {
@@ -101,15 +104,15 @@ public class Project {
         this.updated_At = updated_At;
     }
 
-    public BackLog getBacklog() {
-		return backlog;
-	}
+    public Backlog getBacklog() {
+        return backlog;
+    }
 
-	public void setBacklog(BackLog backlog) {
-		this.backlog = backlog;
-	}
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
+    }
 
-	@PrePersist
+    @PrePersist
     protected void onCreate(){
         this.created_At = new Date();
     }
