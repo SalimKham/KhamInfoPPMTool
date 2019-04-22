@@ -24,11 +24,12 @@ export default function(state = initialState, action) {
       };
 
     case DELETE_PROJECT_TASK:
-      return {
-        ...state
-
-        // TO_DO
-      };
+    return {
+      ...state,
+      project_tasks: state.project_tasks.filter(
+        task => task.projectSequence !== action.payload
+      )
+    };
 
     default:
       return state;
