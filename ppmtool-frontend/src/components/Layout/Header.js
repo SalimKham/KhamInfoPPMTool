@@ -1,13 +1,20 @@
 import React, { Component } from "react";
+import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {logout} from '../../actions/userActions'
+
 
 class Header extends Component {
   render() {
+     const loggedIn = (localStorage.jwtToken ? true : false);
+     
+     
     return (
       <nav className="navbar navbar-expand-sm navbar-dark bg-primary mb-4">
         <div className="container">
-          <a className="navbar-brand" href="Dashboard.html">
+          <Link className="navbar-brand" to="/">
             Personal Project Management Tool
-          </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -18,24 +25,28 @@ class Header extends Component {
           </button>
 
           <div className="collapse navbar-collapse" id="mobile-nav">
-            <ul className="navbar-nav mr-auto">
+            {loggedIn && <ul className="navbar-nav mr-auto">
               <li className="nav-item">
                 <a className="nav-link" href="/dashboard">
                   Dashboard
                 </a>
               </li>
             </ul>
+            }
 
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="nav-link " href="register.html">
-                  Sign Up
-                </a>
+                <Link className="nav-link " to={loggedIn ? "/dashboard" : "/register"}>
+                  { loggedIn ? (this.props.security.user.fullName) : "Sign Up"} 
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="login.html">
+              { !loggedIn ?  (<Link className="nav-link" to="/login">
                   Login
-                </a>
+                </Link>): (<Link className="nav-link" onClick = {this.props.logout} to="/">
+                Logout
+              </Link>)
+              }
               </li>
             </ul>
           </div>
@@ -45,4 +56,8 @@ class Header extends Component {
   }
 }
 
-export default Header;
+const mapStateToProps = state =>({
+   security : state.security
+});
+
+export default connect(mapStateToProps,{logout})(Header);
