@@ -19,6 +19,6 @@ List<ProjectTask> findByProjectIdentifierOrderByPriority(String id);
 ProjectTask findByProjectIdentifierAndProjectSequence(String projectIdentifier,String projectSequence);
 @Modifying
 @Transactional
-@Query("delete from ProjectTask u where u.projectSequence = ?1")
-void deleteProjectByProjectIdentifier(String sequence);
+@Query("delete from ProjectTask u where u.projectSequence = ?1 ")
+void deleteProjectByProjectIdentifier(String sequence );
 }

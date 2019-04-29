@@ -13,6 +13,7 @@ import io.khaminfo.ppmtool.exceptions.ProjectNotFoundException;
 import io.khaminfo.ppmtool.services.MapValidationErrorService;
 import io.khaminfo.ppmtool.services.ProjectTaskService;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -30,47 +31,47 @@ public class BacklogController {
 
 
     @PostMapping("/{backlog_id}")
-    public ResponseEntity<?> addPTtoBacklog(@Valid @RequestBody ProjectTask projectTask,
+    public ResponseEntity<?> addPTtoBacklog(@Valid @RequestBody ProjectTask projectTask,Principal principal,
                                             BindingResult result, @PathVariable String backlog_id){
 
         ResponseEntity<?> erroMap = mapValidationErrorService.MapValidationService(result);
         if (erroMap != null) return erroMap;
 
-        ProjectTask projectTask1 = projectTaskService.addProjectTask(backlog_id, projectTask);
+        ProjectTask projectTask1 = projectTaskService.addProjectTask(backlog_id, projectTask , principal.getName());
 
         return new ResponseEntity<ProjectTask>(projectTask1, HttpStatus.CREATED);
 
     }
     
     @GetMapping("/{backlog_id}")
-    public Iterable<ProjectTask> getProjectTaskList(@PathVariable String backlog_id ){
+    public Iterable<ProjectTask> getProjectTaskList(@PathVariable String backlog_id , Principal principal){
     	try{
-    	    return projectTaskService.findBacklogById(backlog_id);
+    	    return projectTaskService.findBacklogById(backlog_id , principal.getName());
     	}catch(Exception e) {
     		throw new ProjectNotFoundException("Project with id : (" + backlog_id + ") does not exist.");
     	}
     }
     @GetMapping("/{backlog_id}/{projectSequence}")
-    public ResponseEntity<ProjectTask> getProjectTaskList(@PathVariable String backlog_id ,@PathVariable String projectSequence  ){
-    	return new ResponseEntity<ProjectTask>(projectTaskService.findPTByProjectSequence(backlog_id,projectSequence),HttpStatus.OK);
+    public ResponseEntity<ProjectTask> getProjectTaskList(@PathVariable String backlog_id ,@PathVariable String projectSequence , Principal principal){
+    	return new ResponseEntity<ProjectTask>(projectTaskService.findPTByProjectSequence(backlog_id,projectSequence , principal.getName()),HttpStatus.OK);
     }
     
     @PatchMapping("/updateTask")
-    public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask,
+    public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask,Principal principal,
                                             BindingResult result){
 
         ResponseEntity<?> erroMap = mapValidationErrorService.MapValidationService(result);
         if (erroMap != null) return erroMap;
 
-        ProjectTask projectTask1 = projectTaskService.updateProjectTask(projectTask);
+        ProjectTask projectTask1 = projectTaskService.updateProjectTask(projectTask , principal.getName());
 
         return new ResponseEntity<ProjectTask>(projectTask1, HttpStatus.OK);
 
     }
     
     @DeleteMapping("/{sequence}")
-    public ResponseEntity<?> deleteProject(@PathVariable String sequence){
-        projectTaskService.deleteProjectBySequence(sequence);
+    public ResponseEntity<?> deleteProject(@PathVariable String sequence , Principal principal){
+        projectTaskService.deleteProjectBySequence(sequence,principal.getName());
 
         return new ResponseEntity<String>("Project task: '"+sequence+"' was deleted", HttpStatus.OK);
     }

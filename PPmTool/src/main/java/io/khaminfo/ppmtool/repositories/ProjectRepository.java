@@ -13,11 +13,13 @@ import io.khaminfo.ppmtool.domain.Project;
 public interface ProjectRepository extends CrudRepository<Project, Long> {
 
     Project findByProjectIdentifier(String projectId);
+    Project findByProjectIdentifierAndProjectLeader(String projectId , String projectLeader);
     @Modifying
     @Transactional
-    @Query("delete from Project u where u.projectIdentifier = ?1")
-    void deleteProjectByProjectIdentifier(String id);
+    @Query("delete from Project u where u.projectIdentifier = ?1 and u.projectLeader = ?2")
+    void deleteProjectByProjectIdentifier(String id , String userName);
 
     @Override
     Iterable<Project> findAll();
+	Iterable<Project> findAllByProjectLeader(String username);
 }
